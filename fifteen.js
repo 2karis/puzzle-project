@@ -69,5 +69,27 @@ function startGame()
 		}
 	showTable();
 }
+
+function showTable()
+{
+}
+
+function moveTile()
+{
+}
+
+function tileCheck ()
+{
+}
+
+function winner ()
+{
+}
+
+function countMoves ()
+{
+}
+	
+	
 			
 			
