@@ -1,0 +1,106 @@
+<html>
+<head>
+<meta charset="utf-8">
+<!--<script type="text/javascript" src="fifteen.js"></script>-->
+</head>
+<body style=" background: lightblue;">
+    <canvas id="canvas" width="420px" height="420px" style="background: #fff; margin:20px"></canvas>
+    <div id="demo1"><button>Scamble</button></div>
+    <div id="demo"><button id="newGame">newGame</button></div>
+</body>
+<script type="text/javascript" language="javascript">
+    function indexsearch(array, target){
+        for (var i = 0; i < array.length;  i+= 1) {
+            if(array[i][0][0]<= target[0] && array[i][1][0]>=target[0] && array[i][0][1]<= target[1] && array[i][1][1]>=target[1]){
+                return i;
+            }
+        }
+    }
+    function shuffle(){
+        for(var i=0; i <=coordinates.length - 1;i++){
+            var j = Math.floor(Math.random()*(1+i));
+            var temp = coordinates[i][2];
+            coordinates[i][2]=coordinates[j][2];
+            coordinates[j][2]=temp;
+        }
+    } 
+    var current = null;
+    function CheckIndexes(next){
+        if(current==null){
+            current=next;
+        }else if(coordinates[current][3].has(next)){
+            swap(current,next);
+            current = null;
+        }else{
+            current = null;
+        }
+    }
+    function swap(current, next){
+        console.log("swap");
+        var c = document.getElementById("canvas");
+        var context = c.getContext("2d");
+        var folder = "mario";
+        image = new Image();
+        image.src = folder+"\\"+"empty.jpg";
+               
+        //context.drawImage(image,coordinates[current][0][0], coordinates[current][0][1]);
+        //context.drawImage(image,coordinates[next][0][0], coordinates[next][0][1]);
+        image.src = folder+"\\"+coordinates[next][2]+".jpg";
+        context.drawImage(image,coordinates[current][0][0], coordinates[current][0][1]);
+        image.src = folder+"\\"+coordinates[current][2]+".jpg";
+        context.drawImage(image,coordinates[next][0][0], coordinates[next][0][1]);
+        var temp = coordinates[current][2];
+        coordinates[current][2]=coordinates[next][2];
+        coordinates[next][2]=temp;
+    }
+    var coordinates=[
+        [[10.5,10], [110.5,110], 1, new Set([1, 4])],
+        [[110.5,10], [210.5,110],2, new Set([0, 2, 5])],
+        [[210.5,10], [310.5,110],3, new Set([1,3,6])],
+        [[310.5,10], [410.5,110],4, new Set([2, 7])],
+        [[10.5,110], [110.5,210],5, new Set([0,5,8])],
+        [[110.5,110], [210.5,210],6, new Set([1,4,6,9])],
+        [[210.5,110], [310.5,210],7, new Set([2,5,7,10])],
+        [[310.5,110], [410.5,210],8, new Set([3,6,11])],
+        [[ 10.5,210], [110.5,310],9, new Set([4,9,12])],
+        [[110.5,210], [210.5,310],10, new Set([5,8,12,13])],
+        [[210.5,210], [310.5,310],11, new Set([5,9,11,14])],
+        [[310.5,210], [410.5,310],12, new Set([7,10,15])],
+        [[ 10.5,310], [110.5,410],13, new Set([8,13])],
+        [[110.5,310], [210.5,410],14, new Set([9,12,14])],
+        [[210.5,310], [310.5,410],15, new Set([10,13,15])],
+        [[310.5,310], [410.5,410],16, new Set([11,14])]
+    ];
+    
+    shuffle();
+    document.getElementById("demo").innerHTML=coordinates.length;
+
+    
+    window.onload = function() {
+   
+    var c = document.getElementById("canvas");
+    var context = c.getContext("2d");
+    var folder = "mario";
+    for (var i = 0; i < 16; i += 1) {
+            image = new Image();
+            image.src = folder+"\\"+ coordinates[i][2] +".jpg";
+            context.drawImage(image,coordinates[i][0][0], coordinates[i][0][1]);
+        }
+    }
+    function getCursorPosition(canvas, event) {
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    console.log("x: " + x + " y: " + y)
+    var index = indexsearch(coordinates, [x,y]);
+    console.log("index: " + index)
+    CheckIndexes(index);
+
+    }
+
+    const canvas = document.querySelector('canvas')
+    canvas.addEventListener('mousedown', function(e) {
+        getCursorPosition(canvas, e)
+    })
+    </script>
+</html>
