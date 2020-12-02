@@ -9,6 +9,20 @@
     <div id="demo"><button id="newGame">newGame</button></div>
 </body>
 <script type="text/javascript" language="javascript">
+    function drawPicture(source, x,y){
+        var c = document.getElementById("canvas");
+        var context = c.getContext("2d");
+        var folder = "mario";
+        image = new Image();
+        image.src = folder+"\\"+source+".jpg";
+        if (image.complete) {
+            context.drawImage(image, x, y);
+        } else {
+            image.onload = function () {
+            context.drawImage(image, x, y);    
+        };
+    }
+    }
     function indexsearch(array, target){
         for (var i = 0; i < array.length;  i+= 1) {
             if(array[i][0][0]<= target[0] && array[i][1][0]>=target[0] && array[i][0][1]<= target[1] && array[i][1][1]>=target[1]){
@@ -45,10 +59,10 @@
                
         //context.drawImage(image,coordinates[current][0][0], coordinates[current][0][1]);
         //context.drawImage(image,coordinates[next][0][0], coordinates[next][0][1]);
-        image.src = folder+"\\"+coordinates[next][2]+".jpg";
-        context.drawImage(image,coordinates[current][0][0], coordinates[current][0][1]);
-        image.src = folder+"\\"+coordinates[current][2]+".jpg";
-        context.drawImage(image,coordinates[next][0][0], coordinates[next][0][1]);
+        //image.src = folder+"\\"+coordinates[next][2]+".jpg";
+        drawPicture(coordinates[next][2],coordinates[current][0][0], coordinates[current][0][1]);
+        //image.src = folder+"\\"+coordinates[current][2]+".jpg";
+        drawPicture(coordinates[current][2],coordinates[next][0][0], coordinates[next][0][1]);
         var temp = coordinates[current][2];
         coordinates[current][2]=coordinates[next][2];
         coordinates[next][2]=temp;
@@ -77,14 +91,10 @@
 
     
     window.onload = function() {
-   
-    var c = document.getElementById("canvas");
-    var context = c.getContext("2d");
-    var folder = "mario";
+
     for (var i = 0; i < 16; i += 1) {
-            image = new Image();
-            image.src = folder+"\\"+ coordinates[i][2] +".jpg";
-            context.drawImage(image,coordinates[i][0][0], coordinates[i][0][1]);
+
+            drawPicture(coordinates[i][2], coordinates[i][0][0], coordinates[i][0][1]);
         }
     }
     function getCursorPosition(canvas, event) {
