@@ -1,153 +1,179 @@
 var moves = 0;
-var table;
-var rows;
+var table; 
+var rows; 
 var columns;
-var textmoves;
-var boardArray;
-
+var textMoves;
+var arrayForBoard;
 
 function start()
 {
-	var button = document.getElementById("newGame");
-	button.addEventListener("click", startNewDame, false);
-	textmoves = document.getElementById("moves");
-	table = document.getElementById("table");
-	rows = 4;
-	columns = 4;
-	startGame();
+  var button = document.getElementById("newGame");
+  button.addEventListener( "click", startGame, false );
+  textMoves = document.getElementById("moves");
+  table = document.getElementById("table");
+  rows = 4;
+  columns = 4;
+  startGame();
 }
 
 function startGame()
 {
-	var numberArray = new Array();
-	var usedNumberArray;
-	var shuffleNumber = 0;
-	var count = 0;
-	moves = 0;
-	
-	rows = document.getElementById( "rows").value;
-	columns = document.getElementById("columns").value;
-	textmoves.innerHTML = moves;
-	
-	//array size
-	boardArray = new Array(rows);
-	
-		for (var i = 0; i< rows; i++)
-		{
-			boardArray[i] = new Array(columns);
-		}
-		
-	usedNumberArray = new Array( rows * columns );
-	
-		for (var i = 0; i <rows * columns; i++)
-		{
-			usedNumberArray[i] = 0;
-		}
-		
-		for (var i = 0; i < rows * columns; i++)
-		{
-			shuffleNumber = Math.floor(Math.random() * rows * columns);
-				if (usedNumberArray[shuffleNumber] == 0)
-				{
-					usedNumberArray[shuffleNumber] = 1;
-					numberArray.push(shuffleNumber);
-				}
-				else 
-				{
-					i--;
-				}
-		}
-	
-	count = 0;
-		for (var i = 0; i <rows; i++)
-		{
-			for (var j = 0; j <columns; j++)
-			{
-				boardArray[i][j] = numberArray[count];
-				count++;
-			}
-		}
-	showTable();
+  var arrayOfNumbers = new Array();
+  var usedNumber;
+  var randomNumber = 0;
+  var count = 0;
+  moves = 0;
+  rows = document.getElementById("rows").value;
+  columns = document.getElementById("columns").value;
+  textMoves.innerHTML = moves;
+  // Create the proper board size.
+  arrayForBoard = new Array(rows);
+  for (var i = 0; i < rows; i++)
+  {
+    arrayForBoard[i] = new Array(columns);
+  }
+  usedNumber = new Array( rows * columns );
+  for (var i = 0; i < rows * columns; i++)
+  {
+    usedNumber[i] = 0;
+  }
+ 
+  for (var i = 0; i < rows * columns; i++)
+  {
+    randomNumber = Math.floor(Math.random()*rows * columns);
+    if (usedNumber[randomNumber] == 0) 
+    {
+      usedNumber[randomNumber] = 1;
+      arrayOfNumbers.push(randomNumber);
+    }
+    else 
+    {
+      i--;
+    }
+  }
+  
+  // Assign numbers to the game board.
+  count = 0;
+  for (var i = 0; i < rows; i++)
+  {
+    for (var j = 0; j < columns; j++)
+    {
+      arrayForBoard[i][j] = arrayOfNumbers[count];
+      
+      count++;
+    }
+  }
+  showTable();
 }
 
 function showTable()
 {
-	var outString = "";
-	for (var j = 0; i <rows; i++)
-	{
-		outString += "<tr>";
-			for (var j = 0; j <columns; j++)
-			{
-				if (boardArray[i][j] == 0)
-				{
-					outString += "<td class =\"blank\"> </td>";
-				}
-				else 
-				{
-					outString += "<td class = \"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" + arrayForBoard[i][j] + "</td>";
-				}
-			}
-		outString += "<tr>";
-	}
-	
-	table.innerHTML = outString;	
+  var outputString = "";
+  for (var i = 0; i < rows; i++)
+  {
+    outputString += "<tr>";
+    for (var j = 0; j < columns; j++)
+    {
+      if (arrayForBoard[i][j] == 0)
+      {
+	outputString += "<td class=\"blank\"> </td>";
+      }
+      else
+      {
+	outputString += "<td class=\"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" + arrayForBoard[i][j] + "</td>";
+      }
+    } // end for (var j = 0; j < columns; j++)
+    outputString += "</tr>";
+  } // end for (var i = 0; i < rows; i++)
+  
+  table.innerHTML = outputString;
 }
-
 
 function moveTile( tableRow, tableColumn)
 {
-	if(tileCheck(tableRow, tableColumn, "up") ||(tileCheck(tableRow, tableColumn, "down") || (tileCheck(tableRow, tableColumn, "left") || (tileCheck(tableRow, tableColumn, "right"))
-	{
-		countMoves();
-	}
-	else 
-	{
-		alert( "Can't move this tile, try a different one");
-	}
-	
-	if (winner())
-	{
-		alert("【☆】★【☆】★【☆】★【☆】★【☆】 Good job You won. 【☆】★【☆】★【☆】★【☆】★【☆】, it took " +moves + "moves");
-		startGame();
-	}
+  if (tileCheck(tableRow, tableColumn, "up") ||
+      tileCheck(tableRow, tableColumn, "down") ||
+      tileCheck(tableRow, tableColumn, "left") ||
+      tileCheck(tableRow, tableColumn, "right") )
+  {
+    moveCount();
+  }
+  else
+  {
+    alert("ERROR: Cannot move tile!\nTile must be next to a blank space.");
+  }
+    
+  if (winner())
+  {
+    alert("Congratulations! You solved the puzzle in " + moves + " moves.");
+    startNewGame();
+  }
 }
 
-
-function tileCheck (rowCoordinate, columnCoordinate, direction)
+function tileCheck(rowCoordinate, columnCoordinate, direction)
 {
-	
+  rowOffset = 0;
+  columnOffset = 0;
+  if (direction == "up")
+  {
+    rowOffset = -1;
+  }
+  else if (direction == "down")
+  {
+    rowOffset = 1;
+  }
+  else if (direction == "left")
+  {
+    columnOffset = -1;
+  }
+  else if (direction == "right")
+  {
+    columnOffset = 1;
+  }  
+  
+  if (rowCoordinate + rowOffset >= 0 && columnCoordinate + columnOffset >= 0 &&
+    rowCoordinate + rowOffset < rows && columnCoordinate + columnOffset < columns
+  )
+  {
+    if ( arrayForBoard[rowCoordinate + rowOffset][columnCoordinate + columnOffset] == 0)
+    {
+      arrayForBoard[rowCoordinate + rowOffset][columnCoordinate + columnOffset] = arrayForBoard[rowCoordinate][columnCoordinate];
+      arrayForBoard[rowCoordinate][columnCoordinate] = 0;
+      showTable();
+      return true;
+    }
+  }
+  return false; 
 }
 
-function winner ()
+function winner()
 {
-	var count = 1;
-		for( va i = 0; i<rows; i++)
-		{
-			for (var j = 0; j <columns; j++)
-			{
-				if(boardArray[i][j] != count)
-				{
-					if( !(count == rows + columns && boardArray[i][j] == 0))
-					{
-						return false;
-					}
-				}
-				count++;
-			}
-		}
-		return true;
-}
-
-function countMoves ()
-{
-	moves++; 
-	if(textmoves)
+  var count = 1;
+  for (var i = 0; i < rows; i++)
+  {
+    for (var j = 0; j < columns; j++)
+    {
+      if (arrayForBoard[i][j] != count)
+      {
+	if ( !(count === rows * columns && arrayForBoard[i][j] === 0 ))
 	{
-		textmoves.innerHTML = moves;
+	  return false;
 	}
+      }
+      count++;
+    }
+  }
+  
+  return true;
 }
-window.addEventListener( "load", start, false );
-	
-	
-			
-			
+
+function moveCount()
+{
+  moves++;
+  if (textMoves) // This is nessessary.
+  {
+    textMoves.innerHTML = moves;
+  }
+}
+
+window.addEventListener( "load", start, false ); 
