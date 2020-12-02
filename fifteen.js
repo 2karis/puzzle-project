@@ -80,7 +80,7 @@ function showTable()
       }
       else
       {
-	outputString += "<td class=\"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" + arrayForBoard[i][j] + "</td>";
+	outputString += "<td class=\"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" +"<img src='mario\\"+ arrayForBoard[i][j] +".jpg'>"+ "</td>";
       }
     } // end for (var j = 0; j < columns; j++)
     outputString += "</tr>";
