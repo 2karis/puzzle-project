@@ -68,6 +68,14 @@ function startGame()
 
 function showTable()
 {
+  var folder = null;
+  if(rows==2 && columns==2){
+    folder="pacman";
+  }else if(rows==3 && columns==3){
+    folder="link";
+  }else if(rows==4 && columns==4){
+    folder = "mario";
+  }
   var outputString = "";
   for (var i = 0; i < rows; i++)
   {
@@ -80,7 +88,7 @@ function showTable()
       }
       else
       {
-	outputString += "<td class=\"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" +"<img src='mario\\"+ arrayForBoard[i][j] +".jpg'>"+ "</td>";
+	outputString += "<td class=\"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" +"<img src='"+folder+"\\"+ arrayForBoard[i][j] +".jpg'>"+ "</td>";
       }
     } // end for (var j = 0; j < columns; j++)
     outputString += "</tr>";
