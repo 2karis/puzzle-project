@@ -100,12 +100,12 @@ function moveTile( tableRow, tableColumn)
   }
   else
   {
-    alert("ERROR: Cannot move tile!\nTile must be next to a blank space.");
+    alert("Cant move this tile, try again");
   }
     
   if (winner())
   {
-    alert("Congratulations! You solved the puzzle in " + moves + " moves.");
+    alert("【☆】★【☆】★【☆】★【☆】★【☆】Good Job You won. 【☆】★【☆】★【☆】★【☆】★【☆】 Puzzle was solved in " + moves + " moves.");
     startNewGame();
   }
 }
