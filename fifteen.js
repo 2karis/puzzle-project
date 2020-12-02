@@ -72,23 +72,81 @@ function startGame()
 
 function showTable()
 {
+	var outString = "";
+	for (var j = 0; i <rows; i++)
+	{
+		outString += "<tr>";
+			for (var j = 0; j <columns; j++)
+			{
+				if (boardArray[i][j] == 0)
+				{
+					outString += "<td class =\"blank\"> </td>";
+				}
+				else 
+				{
+					outString += "<td class = \"tile\" onclick=\"moveTile(" + i + ", " + j + ")\">" + arrayForBoard[i][j] + "</td>";
+				}
+			}
+		outString += "<tr>";
+	}
+	
+	table.innerHTML = outString;	
 }
 
-function moveTile()
+
+function moveTile( tableRow, tableColumn)
 {
+	if(tileCheck(tableRow, tableColumn, "up") ||(tileCheck(tableRow, tableColumn, "down") || (tileCheck(tableRow, tableColumn, "left") || (tileCheck(tableRow, tableColumn, "right"))
+	{
+		countMoves();
+	}
+	else 
+	{
+		alert( "Can't move this tile, try a different one");
+	}
+	
+	if (winner())
+	{
+		alert("【☆】★【☆】★【☆】★【☆】★【☆】 Good job You won. 【☆】★【☆】★【☆】★【☆】★【☆】, it took " +moves + "moves");
+		startGame();
+	}
 }
 
-function tileCheck ()
+
+function tileCheck (rowCoordinate, columnCoordinate, direction)
 {
+	
 }
 
 function winner ()
 {
+	var count = 1;
+		for( va i = 0; i<rows; i++)
+		{
+			for (var j = 0; j <columns; j++)
+			{
+				if(boardArray[i][j] != count)
+				{
+					if( !(count == rows + columns && boardArray[i][j] == 0))
+					{
+						return false;
+					}
+				}
+				count++;
+			}
+		}
+		return true;
 }
 
 function countMoves ()
 {
+	moves++; 
+	if(textmoves)
+	{
+		textmoves.innerHTML = moves;
+	}
 }
+window.addEventListener( "load", start, false );
 	
 	
 			
